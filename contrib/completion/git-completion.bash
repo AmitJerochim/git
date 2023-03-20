@@ -2343,6 +2343,213 @@ _git_reflog ()
 	fi
 }
 
+# Adding bash-completion for git-secret
+# https://github.com/sobolevn/git-secret
+_git_secret()
+{
+	if $(git secret --version &>/dev/null);
+	then
+		local commands="
+				add cat changes clean hide init killperson list
+				remove reveal tell usage whoknows --version
+				"
+		if [ "${#COMP_WORDS[@]}" = "3" ];
+		then
+			COMPREPLY=( $( compgen -W "$commands" -- $cur) )
+			return
+		fi
+		local command="${COMP_WORDS[2]}"
+		case "$command" in
+		add|clean)
+			case "$cur" in
+			-*)
+				dashoptions=""
+				if ! [[ "${COMP_WORDS[*]}" =~ .*\ -v.*|.*\ -h.* ]];
+				then
+					dashoptions="-v -h $dashoptions"
+				fi
+				COMPREPLY=( $( compgen -W "$dashoptions" -- $cur) )
+				;;
+			*)
+				return
+				;;
+			esac
+			;;
+		changes)
+			case "$cur" in
+			-*)
+				dashoptions=""
+				if ! [[ "${COMP_WORDS[*]}" =~ .*\ -h.* ]];
+				then
+					dashoptions="-h $dashoptions"
+				fi
+				if ! [[ "${COMP_WORDS[*]}" =~ .*\ -p.* ]];
+				then
+					dashoptions="-p $dashoptions"
+				fi
+				if ! [[ "${COMP_WORDS[*]}" =~ .*\ -d.* ]];
+				then
+					dashoptions="-d $dashoptions"
+				fi
+				COMPREPLY=( $( compgen -W "$dashoptions" -- $cur) )
+				;;
+			*)
+				return
+				;;
+			esac
+			;;
+		init|killperson|list|usage)
+			case "$cur" in
+			-*)
+				dashoptions=""
+				if ! [[ "${COMP_WORDS[*]}" =~ .*\ -h.* ]];
+				then
+					dashoptions="-h $dashoptions"
+				fi
+				COMPREPLY=( $( compgen -W "$dashoptions" -- $cur) )
+				;;
+			*)
+				return
+				;;
+			esac
+			;;
+		hide)
+			case "$cur" in
+			-*)
+				dashoptions=""
+				if ! [[ "${COMP_WORDS[*]}" =~ .*\ -v.* ]];
+				then
+					dashoptions="-v $dashoptions"
+				fi
+				if ! [[ "${COMP_WORDS[*]}" =~ .*\ -c.* ]];
+				then
+					dashoptions="-c $dashoptions"
+				fi
+				if ! [[ "${COMP_WORDS[*]}" =~ .*\ -F.* ]];
+				then
+					dashoptions="-F $dashoptions"
+				fi
+				if ! [[ "${COMP_WORDS[*]}" =~ .*\ -P.* ]];
+				then
+					dashoptions="-p $dashoptions"
+				fi
+				if ! [[ "${COMP_WORDS[*]}" =~ .*\ -d.* ]];
+				then
+					dashoptions="-d $dashoptions"
+				fi
+				if ! [[ "${COMP_WORDS[*]}" =~ .*\ -m.* ]];
+				then
+					dashoptions="-m $dashoptions"
+				fi
+				if ! [[ "${COMP_WORDS[*]}" =~ .*\ -h.* ]];
+				then
+					dashoptions="-h $dashoptions"
+				fi
+				COMPREPLY=( $( compgen -W "$dashoptions" -- $cur) )
+				;;
+			*)
+				return
+				;;
+			esac
+			;;
+		remove)
+			case "$cur" in
+			-*)
+				dashoptions=""
+				if ! [[ "${COMP_WORDS[*]}" =~ .*\ -c.*|.*\ -h.* ]];
+				then
+					dashoptions="-c -h $dashoptions"
+				fi
+				COMPREPLY=( $( compgen -W "$dashoptions" -- $cur) )
+				;;
+			*)
+				return
+				;;
+			esac
+			;;
+		reveal)
+			case "$cur" in
+			-*)
+				dashoptions=""
+				if ! [[ "${COMP_WORDS[*]}" =~ .*\ -f.* ]];
+				then
+					dashoptions="-f $dashoptions"
+				fi
+				if ! [[ "${COMP_WORDS[*]}" =~ .*\ -F.* ]];
+				then
+					dashoptions="-F $dashoptions"
+				fi
+				if ! [[ "${COMP_WORDS[*]}" =~ .*\ -d.* ]];
+				then
+					dashoptions="-d $dashoptions"
+				fi
+				if ! [[ "${COMP_WORDS[*]}" =~ .*\ -v.* ]];
+				then
+					dashoptions="-v $dashoptions"
+				fi
+				if ! [[ "${COMP_WORDS[*]}" =~ .*\ -P.* ]];
+				then
+					dashoptions="-P $dashoptions"
+				fi
+				if ! [[ "${COMP_WORDS[*]}" =~ .*\ -p.* ]];
+				then
+					dashoptions="-p $dashoptions"
+				fi
+				if ! [[ "${COMP_WORDS[*]}" =~ .*\ -h.* ]];
+				then
+					dashoptions="-h $dashoptions"
+				fi
+				COMPREPLY=( $( compgen -W "$dashoptions" -- $cur) )
+				;;
+			*)
+				return
+				;;
+			esac
+			;;
+		tell)
+			case "$cur" in
+			-*)
+				dashoptions=""
+				if ! [[ "${COMP_WORDS[*]}" =~ .*\ -h.* ]];
+				then
+					dashoptions="-h $dashoptions"
+				fi
+				if ! [[ "${COMP_WORDS[*]}" =~ .*\ -m.* ]];
+				then
+					dashoptions="-m $dashoptions"
+				fi
+				if ! [[ "${COMP_WORDS[*]}" =~ .*\ -d.* ]];
+				then
+					dashoptions="-d $dashoptions"
+				fi
+				COMPREPLY=( $( compgen -W "$dashoptions" -- $cur) )
+				;;
+			*)
+				return
+				;;
+			esac
+			;;
+		whoknows)
+			case "$cur" in
+			-*)
+				dashoptions=""
+				if ! [[ "${COMP_WORDS[*]}" =~ .*\ -l.*|.*\ -h.* ]];
+				then
+					dashoptions="-l -h $dashoptions"
+				fi
+				COMPREPLY=( $( compgen -W "$dashoptions" -- $cur) )
+				;;
+			*)
+				return
+				;;
+			esac
+			;;
+		esac
+	else
+		return
+	fi
+}
+
 __git_send_email_confirm_options="always never auto cc compose"
 __git_send_email_suppresscc_options="author self cc bodycc sob cccmd body all"
 
